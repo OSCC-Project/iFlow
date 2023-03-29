@@ -1,0 +1,10 @@
+{
+    "PM": {
+        "-log_level": 0,
+        "-ban_pa_generate_layer_list": [],
+        "-only_via_access_layer_list": [
+            "met1"
+        ],
+        "temp_directory_path": "./result/pm/pm_temp_directory"
+    }
+}

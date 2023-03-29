@@ -1,0 +1,51 @@
+{
+    "file_path": {
+        "read_cts_data": "OFF",
+        "write_cts_data": "ON",
+        "cts_data_file": "./result/cts/cts_t28.dat",
+        "sta_work_dir": "./result/cts",
+        "log_file": "./result/cts/cts.log",
+        "gds_file": "./result/cts/cts.gds"
+    },
+    "router_type": "ZST",
+    "delay_type": "elmore",
+    "skew_bound": "0.004",
+    "init_buf_cap": "0.002586",
+    "max_buf_tran": "0.05",
+    "max_sink_tran": "0.05",
+    "max_cap": "0.15",
+    "max_fanout": "32",
+    "max_length": "300",
+    "cluster_type": "kmeans",
+    "cluster_size": 32,
+    "buffer_type": [
+        "CKBD16BWP35P140"
+    ],
+    "use_netlist": "OFF",
+    "net_list": [
+        {
+            "clock_name": "CLK_u0_chiplink_rx_clk_pad_PAD",
+            "net_name": "chiplink_rx_clk"
+        },
+        {
+            "clock_name": "CLK_u0_clk_XC",
+            "net_name": "clk_core"
+        },
+        {
+            "clock_name": "CLK_u1_clk_XC",
+            "net_name": "clk_hs_peri"
+        },
+        {
+            "clock_name": "CLK_u0_clk_XC",
+            "net_name": "clk_peri"
+        },
+        {
+            "clock_name": "CLK_u2_clk_XC",
+            "net_name": "sdram_clk_o"
+        },
+        {
+            "clock_name": "CLK_u0_clk_XC",
+            "net_name": "sys_clk_25m_buf"
+        }
+    ]
+}

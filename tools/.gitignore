@@ -1,0 +1,14 @@
+*
+!.gitignore
+!iDR
+!iDR/**
+!iGR
+!iGR/**
+!iFP
+!iFP/**
+!OpenROAD_fixcts
+!OpenROAD_fixcts/**
+!yosys4be891e8
+!yosys4be891e8/**
+!iEDA_0.1
+!iEDA_0.1/**

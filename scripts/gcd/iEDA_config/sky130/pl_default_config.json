@@ -1,0 +1,88 @@
+{
+    "PL": {
+        "is_max_length_opt": 0,
+        "max_length_constraint": 900,
+        "GP": {
+            "Wirelength": {
+                "init_wirelength_coef": 0.25,
+                "reference_hpwl": 446000000,
+                "min_wirelength_force_bar": -300
+            },
+            "Density": {
+                "target_density": 0.24,
+                "bin_cnt_x": 512,
+                "bin_cnt_y": 512
+            },
+            "Nesterov": {
+                "max_iter": 2000,
+                "max_backtrack": 10,
+                "init_density_penalty": 0.00008,
+                "target_overflow": 0.1,
+                "initial_prev_coordi_update_coef": 100,
+                "min_precondition": 1.0,
+                "min_phi_coef": 0.95,
+                "max_phi_coef": 1.05
+            }
+        },
+        "BUFFER": {
+            "max_buffer_num": 35000,
+            "buffer_type": [
+                "sky130_fd_sc_hs__buf_1"
+            ]
+        },
+        "LG": {
+            "global_right_padding": 2
+        },
+        "DP": {
+            "global_right_padding": 2
+        },
+        "Filler": {
+            "first_iter": [
+                "sky130_fd_sc_hs__fill_8",
+                "sky130_fd_sc_hs__fill_4",
+                "sky130_fd_sc_hs__fill_2",
+                "sky130_fd_sc_hs__fill_1"
+            ],
+            "second_iter": [
+                "sky130_fd_sc_hs__fill_8",
+                "sky130_fd_sc_hs__fill_4",
+                "sky130_fd_sc_hs__fill_2",
+                "sky130_fd_sc_hs__fill_1"
+            ],
+            "min_filler_width": 1
+        },
+        "MP": {
+            "fixed_macro": [
+                "u0_rcg/u0_pll",
+                "u0_rcg/u1_pll"
+            ],
+            "fixed_macro_coordinate": [
+                280408,
+                3040000,
+                280408,
+                2200000
+            ],
+            "blockage": [
+                159900,
+                2080000,
+                874759,
+                3758880
+            ],
+            "guidance_macro": [],
+            "guidance": [],
+            "solution_type": "BStarTree",
+            "SimulateAnneal": {
+                "perturb_per_step": 100,
+                "cool_rate": 0.92
+            },
+            "Partition": {
+                "parts": 66,
+                "ufactor": 100,
+                "new_macro_density": 0.6
+            },
+            "halo_x": 30000,
+            "halo_y": 30000,
+            "output_path": "./result/pl/mp"
+        }
+    }
+}
