@@ -39,27 +39,52 @@ export IFLOW_MIRROR_URL
 source $IFLOW_SHELL_DIR/common.sh
 
 # essential package
-RUN sudo apt install build-essential clang libreadline-dev bison flex libffi-dev cmake libboost-all-dev swig klayout libeigen3-dev libspdlog-dev -y
-
+if [ `whoami` = "root" ]; then
+        RUN apt install wget build-essential clang libreadline-dev bison flex libffi-dev cmake libboost-all-dev swig klayout libeigen3-dev libspdlog-dev -y
+else
+        RUN sudo apt install wget build-essential clang libreadline-dev bison flex libffi-dev cmake libboost-all-dev swig klayout libeigen3-dev libspdlog-dev -y
+fi
 # tcl
-RUN sudo apt install tcl-dev -y
-RUN sudo cp -f /usr/include/tcl8.6/*.h /usr/include/
-RUN sudo ln -s -f /usr/lib/x86_64-linux-gnu/libtcl8.6.so /usr/lib/x86_64-linux-gnu/libtcl8.5.so
+if [ `whoami` = "root" ]; then
+        apt install tcl-dev -y
+        cp -f /usr/include/tcl8.6/*.h /usr/include/
+        ln -s -f /usr/lib/x86_64-linux-gnu/libtcl8.6.so /usr/lib/x86_64-linux-gnu/libtcl8.5.so
+else
+        RUN sudo apt install tcl-dev -y
+        RUN sudo cp -f /usr/include/tcl8.6/*.h /usr/include/
+        RUN sudo ln -s -f /usr/lib/x86_64-linux-gnu/libtcl8.6.so /usr/lib/x86_64-linux-gnu/libtcl8.5.so
+fi
 
 # lemon
-CHECK_DIR /usr/local/include/lemon ||\
-{
-    RUN wget http://lemon.cs.elte.hu/pub/sources/lemon-1.3.1.tar.gz
-    RUN tar zxvf lemon-1.3.1.tar.gz
-    RUN cd lemon-1.3.1
-    RUN mkdir build 
-    RUN cd build 
-    RUN cmake .. 
-    RUN make -j$IFLOW_BUILD_THREAD_NUM 
-    RUN sudo make install
-    RUN cd ../../
-    RUN rm -rf lemon-1.3.1 lemon-1.3.1.tar.gz
-}
+if [ `whoami` = "root" ]; then
+        CHECK_DIR /usr/local/include/lemon ||\
+        {
+                RUN wget http://lemon.cs.elte.hu/pub/sources/lemon-1.3.1.tar.gz
+                RUN tar zxvf lemon-1.3.1.tar.gz
+                RUN cd lemon-1.3.1
+                CHECK_DIR build || RUN mkdir build
+                RUN cd build
+                RUN cmake ..
+                RUN make -j$IFLOW_BUILD_THREAD_NUM
+                RUN make install
+                RUN cd ../../
+                RUN rm -rf lemon-1.3.1 lemon-1.3.1.tar.gz
+        }
+else
+        CHECK_DIR /usr/local/include/lemon ||\
+        {
+                RUN wget http://lemon.cs.elte.hu/pub/sources/lemon-1.3.1.tar.gz
+                RUN tar zxvf lemon-1.3.1.tar.gz
+                RUN cd lemon-1.3.1
+                CHECK_DIR build || RUN mkdir build
+                RUN cd build
+                RUN cmake ..
+                RUN make -j$IFLOW_BUILD_THREAD_NUM
+                RUN sudo make install
+                RUN cd ../../
+                RUN rm -rf lemon-1.3.1 lemon-1.3.1.tar.gz
+        }
+fi
 
 # update iFlow
 RUN cd $IFLOW_ROOT_DIR
