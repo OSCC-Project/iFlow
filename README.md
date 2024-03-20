@@ -170,7 +170,7 @@ iFlow的顶层脚本为iFlow/scripts/run_flow.py，可以通过选择不同的�
 
 图1：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%871.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%871.png)
 
 ### 2、配置脚本
 iFlow的配置脚本目录为“iFlow/scripts/cfg”，目录下有四个脚本包括“data_def.py”、“flow_cfg.py”、“foundry_cfg.py”、“tools_cfg.py”，他们分别控制数据的定义，流程配置、工艺库配置以及工具版本的配置。
@@ -178,7 +178,7 @@ iFlow的配置脚本目录为“iFlow/scripts/cfg”，目录下有四个脚本�
 这个脚本主要定义了“Foundry”、“Tools”、“Flow”三个主要参数及其属性，其中，在“Flow”参数中定义了流程所含有的步骤，如图2所示。
 
 图2：   
-![输入图片说明](.image/%E5%9B%BE%E7%89%872.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%872.png)
 
 图2中绿框中定义了Flow中具有哪些步骤，iFlow中默认的步骤分得比较细，一共有12步，用户也可以根据自己的需求进行添加步骤或者合并步骤，并到顶层脚本中做相应的修改。图2中蓝框中配置了每一步对应使用的工具及其版本（这里的版本是我们定义的版本号，并非github中的版本号，对应的工具可在“tools_cfg.py”脚本中配置），iFlow除了综合synth及版图输出layout步骤外，其余后端物理设计步骤均使用OpenRoad工具实现，其中v2def步骤不是必须的，该步骤用于将网表转为def，OpenROAD工具也可以直接读入 .v文件（网表）。
 
@@ -192,12 +192,12 @@ iFlow的配置脚本目录为“iFlow/scripts/cfg”，目录下有四个脚本�
 
 图3：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%873.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%873.png)
 
 
 图4：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%874.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%874.png)
 
 #### （3）foundry_cfg.py
 
@@ -205,7 +205,7 @@ iFlow的配置脚本目录为“iFlow/scripts/cfg”，目录下有四个脚本�
 
 图5：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%875.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%875.png)
 
 #### （4）tools_cfg.py
 
@@ -217,7 +217,7 @@ iFlow的配置脚本目录为“iFlow/scripts/cfg”，目录下有四个脚本�
 
 图6：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%876.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%876.png)
 
 ## 五、iFlow流程介绍
 ### 3、综合
@@ -225,13 +225,13 @@ iFlow使用的综合工具是yosys，版本号为4be891e8。综合的目的是�
 
 图7：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%877.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%877.png)
 
 首先，要配置好综合需要读入的库文件，例如blackbox的verilog文件和map文件等等，然后，还需要对一些综合时要用到的特定的cell也要在这里进行配置，包括tie cell和buffer。最后，还需要配置RTL代码所在的路径。
 
 图8：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%878.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%878.png)
 
 综合相关的命令如图8所示，包括综合、优化以及mapping三个主要步骤，其中abc在优化时需要读入时序约束sdc文件，这个文件需要放在“iFlow/rtl”目录中对应的设计目录下，用于综合时进行时序优化。跑单步综合命令如下：
 ```
@@ -247,23 +247,23 @@ iFlow中布局包括六个小步骤，分别为floorplan、tapcell、PDN、gplac
 
 图9：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%879.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%879.png)
 
 在floorplan阶段，会根据工艺相关的techfile文件生成Row和Site，这里选择的Site类型为“unit”，如图10所示。此外，floorplan阶段还会生成用于走线的track，因此还需要在“iFlow/foundry/$FOUNDRY”目录下配置track对应的参数，如图11所示，sky130工艺一共有6层金属，这里对它们的走线track进行了定义。
 
 图10：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8710.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8710.png)
 
 图11：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8711.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8711.png)
 
 完成了参数的配置后，需要进行floorplan的初始化，生成相应的Die、Core及Row等等，OpenRoad的floorplan初始化有三种，可以根据设置好的策略进行初始化，可以根据设定的利用率进行初始化，还可以根据设定的“DIE_AREA”和“CORE_AREA”进行初始化，iFlow的floorplan脚本默认情况下，采用第三种，如图12红框中所示。
 
 图12：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8712.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8712.png)
 
 跑单步floorplan命令如下：
 ```
@@ -275,11 +275,11 @@ iFlow中布局包括六个小步骤，分别为floorplan、tapcell、PDN、gplac
 
 图13：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8713.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8713.png)
 
 图14：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8714.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8714.png)
 
 跑单步tapcell命令如下：
 ```
@@ -291,13 +291,13 @@ iFlow中布局包括六个小步骤，分别为floorplan、tapcell、PDN、gplac
 
 图15：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8715.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8715.png)
 
 Sky130工艺的配置文件中具体的内容如图16所示。在“pdn_sky130.cfg”配置文件中，首先要创建电源相关的net，包括“VDD”和“VSS”，如图16中红框所示，然后需要把与电源相关的pin从逻辑上连接到“VDD”和“VSS”两个net上，如图16中绿框所示，最后是构建电源网络的power stripe，在这个工艺下，构建了用于标准单元供电的met1 power rail和met4、met5的power stripe，如图16中橙框所示。此外，在含有macro的设计中，我们还需要将marco中的电源连接到芯片的电源网络上，从而为marco供电。
 
 图16：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8716.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8716.png)
 
 跑单步pdn命令如下：
 ```
@@ -310,17 +310,17 @@ Sky130工艺的配置文件中具体的内容如图16所示。在“pdn_sky130.c
 
 图17：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8717.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8717.png)
 
 运行gplace的命令如图18所示，overflow参数默认为0.1，用户也可以自行定义。在gplace阶段，是不会去修复所有的单元重叠，标准单元的合法化需要到dplace阶段才会实现，在gplace阶段，会不断对标准单元的位置进行优化迭代，直到overflow达到所设定的值，如图19所示，经过420次迭代后满足设定的overflow值0.01。
 
 图18：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8718.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8718.png)
 
 图19：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8719.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8719.png)
 
 跑单步gplace命令如下：
 ```
@@ -332,13 +332,13 @@ resize这一步骤主要是在dplace前，进行一部分标准单元的更换�
 
 图20：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8720.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8720.png)
 
 在iFlow的resize流程中，主要是进行fanout的修复，降低fanout以增加各级的驱动能力，具体的命令如图21所示。此外，还可以通过命令指定修复cap和slew所用的buffer类型，分别为“repair_max_cap -buffer_cell $buffer_cell”、“repair_max_slew -buffer_cell $buffer_cell”。
 
 图21：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8721.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8721.png)
 
 跑单步resize命令如下：
 ```
@@ -357,13 +357,13 @@ CTS的全称为Clock Tree Synthesis，时钟树综合，这是后端物理设计
 
 图22：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8722.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8722.png)
 
 与CTS相关的主要命令如图23所示，构建时钟树之前需要先对原有的buffer和inverter进行resize操作，即通过更换buffer和inverter的尺寸已增强驱动能力，在时钟树综合时再根据所需插入buffer和inverter，时钟树构建之后，这时已有实际的时钟，使用命令“repair_clock_nets”修cap，slew和skew。此外，还需要重新进行一次dplace，因为CTS时会插入buffer和inverter，需要再次dplace来保证标准单元位置摆放的合法化。
 
 图23：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8723.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8723.png)
 
 跑单步CTS命令如下：
 ```
@@ -375,7 +375,7 @@ CTS的全称为Clock Tree Synthesis，时钟树综合，这是后端物理设计
 
 图24：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8724.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8724.png)
 
 跑单步filler命令如下：
 ```
@@ -389,17 +389,17 @@ groute又称为global route，这一步骤会做好布线资源分配，生成�
 
 图25：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8725.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8725.png)
 
 在开始groute前，如果设计中有用到sram等marco，还需要给marco加上routing blockage，避免在布线时外部的走线与marco内部走线重叠而产生短路，如图26所示。加上routing blockage后，便可以开始groute，命令如图27所示，这里设置200次迭代，groute阶段必须保证完全消除overflow，从而避免存在短路现象，否则会使芯片功能错误。
 
 图26：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8726.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8726.png)
 
 图27：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8727.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8727.png)
 
 跑单步groute命令如下：
 ```
@@ -411,7 +411,7 @@ droute流程是将groute输出的route.guide文件读入，并根据guide文件�
 
 图28：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8728.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8728.png)
 
 跑单步droute命令如下：
 ```
@@ -424,7 +424,7 @@ merge过程的具体命令在顶层脚本“run_flow.py”中实现，如图29�
 
 图29：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8729.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8729.png)
 
 跑单步layout（merge）命令如下：
 ```
@@ -434,11 +434,11 @@ merge过程的具体命令在顶层脚本“run_flow.py”中实现，如图29�
 
 图30：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8730.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8730.png)
 
 图31：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8731.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8731.png)
 
 klayout也可以直接打开GDS，使用klayout打开GDS的命令如下：
 ```
@@ -447,7 +447,7 @@ klayout  xxxx.gds
 
 图32：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8732.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8732.png)
 
 # 开源EDA流程iFlow使用示例——更换设计
 ## 一、gcd设计
@@ -455,7 +455,7 @@ gcd(greatest common denominator)是一个计算最小公分母的设计，是一
 
 图33：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8733.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8733.png)
 
 ## 二、uart设计
 uart设计是一种通用串行数据总线的设计，是一个百门级到千门级的设计，用于异步通信。下面将讲述一下如何将iFlow中的design更换为uart设计。
@@ -464,11 +464,11 @@ uart设计是一种通用串行数据总线的设计，是一个百门级到千�
 
 图34：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8734.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8734.png)
 
 图35：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8735.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8735.png)
 
 定义好flow之后，我们需要准备uart设计的流程脚本，进入到“iFlow/scripts”目录，运行命令：
 ```
@@ -478,13 +478,13 @@ cp -r gcd uart
 
 图36：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8736.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8736.png)
 
 由于uart设计的规模和gcd设计非常接近，在使用sky130工艺的情况下，我们可以沿用gcd设计的floorplan设置，也可以适当的调节DIE_AREA和CORE_AREA，如图37所示，
 
 图37：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8737.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8737.png)
 
 其余的步骤可以不用修改，进入目录“iFlow/scripts”，运行命令：
 ```
@@ -494,14 +494,14 @@ cp -r gcd uart
 
 图38：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8738.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8738.png)
 
 ## 三、aes_cipher_top设计
 aes_cipher_top是一个加密算法的小模块，相对于前面两个设计，aes_cipher_top的规模要大很多，是一个万门级的设计。与uart设计一样，首先要修改综合脚本中的Verilog代码路径，然后调整floorplan，增大芯片的面积，如图39所示。
 
 图39：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8739.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8739.png)
 
 然后进入目录“iFlow/scripts”，运行命令
 ```
@@ -511,7 +511,7 @@ aes_cipher_top是一个加密算法的小模块，相对于前面两个设计，
 
 图40：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8740.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8740.png)
 
 # 练习：picorv32设计更换并跑通后端流程
 picorv32是一个实现RISC-V RV32IMC指令集的CPU内核，大家可以尝试更换picorv32设计跑后端流程。
@@ -526,13 +526,13 @@ Nangate45 PDK的源地址为：https://eda.ncsu.edu/freepdk/。在iFlow中的nan
 
 图41：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8741.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8741.png)
 
 然后需要在脚本中加入nangate45工艺库的参数设置，这里用aes_cipher_top设计的综合脚本举例，如图42所示，对于不同的工艺库，所用到的TIE cell和buffer名称是不一样的，需要根据工艺库进行修改，对于其他步骤的脚本也是如此。
 
 图42：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8742.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8742.png)
 
 其中电源网络的脚本，需要引用nangate45工艺的电源网络配置“pdn_nangate45.cfg”，因为每个工艺电源网络的配置差别是比较大的。脚本参数修改完之后，运行命令：
 ```
@@ -542,7 +542,7 @@ Nangate45 PDK的源地址为：https://eda.ncsu.edu/freepdk/。在iFlow中的nan
 
 图43：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8743.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8743.png)
 
 ## 二、asap7
 asap7的源地址为：https://asap.asu.edu/。在iFlow中的asap7工艺库是经过整理的。
@@ -551,11 +551,11 @@ asap7是开源的7nm工艺，因此我们需要把floorplan面积调得更小，
 
 图44：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8744.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8744.png)
 
 图45：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8745.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8745.png)
 
 运行命令：
 ```
@@ -565,7 +565,7 @@ asap7是开源的7nm工艺，因此我们需要把floorplan面积调得更小，
 
 图46：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8746.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8746.png)
 
 大家也可以尝试一下用asap7工艺去跑uart设计，但不建议用来尝试aes_cipher_top设计，因为aes_cipher_top设计比较大，droute步骤会存在很多DRC违例，工具在解DRC时需要花费大量时间，可能还绕不通线。
 
@@ -575,14 +575,14 @@ iEDA工具已经嵌套在iFlow中，更换工具时，首先需要把工具放�
 
 图47：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8747.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8747.png)
 
 ## 二、配置工具相关参数
 将iEDA工具的路径配置到脚本“iFlow/scripts/cfg/ tools_cfg.py”中，配置iEDA工具可以完成的后端流程步骤，配置iEDA工具的版本号，如图48所示。
 
 图48：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8748.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8748.png)
 
 ## 三、Flow步骤定义
 定义使用iEDA工具时的flow步骤，如图49所示，在使用iEDA工具时，flow的步骤由默认的“synth,floorplan,tapcell,pdn,gplace,resize,dplace,cts,filler,
@@ -590,12 +590,12 @@ groute,droute,layout”变为“synth,v2def,floorplan,fix_fanout,place,cts,fix_d
 
 图49：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8749.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8749.png)
 
 ## 四、定义工具对应的Flow
 定义Flow时，需要加上flow的标识flag，当要使用默认的flow步骤时，标识flag设为空即可，当要使用iEDA的flow步骤是，将标识flag设为“iEDA”，如图50所示。配置完成之后，再将工具对应的脚本加入到对应的设计脚本目录下即可使用。
 
 图50：
 
-![输入图片说明](.image/%E5%9B%BE%E7%89%8750.png)
+![输入图片说明](.resource/%E5%9B%BE%E7%89%8750.png)
 
