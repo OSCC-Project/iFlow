@@ -32,3 +32,12 @@ function RUN()
         fi
     done
 }
+
+function RUN_ROOT()
+{
+    if [ `whoami` = "root" ]; then
+        RUN $*
+    else
+        RUN sudo $*
+    fi
+}
