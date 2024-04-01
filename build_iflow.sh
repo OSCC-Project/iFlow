@@ -35,13 +35,13 @@ export IFLOW_ROOT_DIR
 export IFLOW_SHELL_DIR
 export IFLOW_TOOLS_DIR
 export IFLOW_MIRROR_URL
+export DEBIAN_FRONTEND=noninteractive
 
 source $IFLOW_SHELL_DIR/common.sh
 
 # essential package
-RUN_ROOT apt install wget build-essential clang libreadline-dev bison flex libffi-dev cmake libboost-all-dev swig klayout libeigen3-dev libspdlog-dev -y
-# tcl
-RUN_ROOT apt install tcl-dev -y
+RUN_ROOT apt-get update && apt-get install -y git wget build-essential clang libreadline-dev \
+    bison flex libffi-dev cmake libboost-all-dev swig klayout libeigen3-dev libspdlog-dev tcl-dev
 RUN_ROOT cp -f /usr/include/tcl8.6/*.h /usr/include/
 RUN_ROOT ln -s -f /usr/lib/x86_64-linux-gnu/libtcl8.6.so /usr/lib/x86_64-linux-gnu/libtcl8.5.so
 
@@ -59,10 +59,6 @@ CHECK_DIR /usr/local/include/lemon ||\
         RUN cd ../../
         RUN rm -rf lemon-1.3.1 lemon-1.3.1.tar.gz
 }
-
-# update iFlow
-RUN cd $IFLOW_ROOT_DIR
-RUN git pull origin master
 
 # install tools
 RUN $IFLOW_SHELL_DIR/install_tools.sh
