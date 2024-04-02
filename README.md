@@ -1,9 +1,11 @@
 # User Guide of iFlow
 ## Prerequisites
 
-The script supports Ubuntu 20.04. It is not recommended to use the version below 20.04.
+The script supports Ubuntu 20.04. Not recommended for distribution release versions other than Ubuntu 20.04.
 
 ### install dependencies
+
+下列内容仅供参考，以 `build_iflow.sh`、`scripts/shell/install_tools.sh` 脚本执行为准
 
 Tools
   * build-essential 12.8
@@ -23,19 +25,19 @@ Library
   * lemon 1.3.1
 
 ## 一、Build iFlow
+
+推荐使用Docker镜像部署运行环境：
+
+```
+docker pull iedaopensource/iflow:latest
+```
+
+若进行手动构建，执行下列内容：
+
 ```
 git clone https://gitee.com/ieda-iflow/iFlow.git   //构建iFlow目录结构
 cd iFlow
-```
-
-不使用代理下载
-```
-./build_iflow.sh                                  //运行脚本下载EDA工具
-```
-
-使用代理下载，代理可自定义。例如代理为hub.fastgit.xyz
-```
-./build_iflow.sh -mirror hub.fastgit.xyz          //运行脚本下载EDA工具
+bash build_iflow.sh                                  //运行脚本下载EDA工具
 ```
 
 完成后即可使用iFlow。
