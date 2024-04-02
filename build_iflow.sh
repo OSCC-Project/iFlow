@@ -38,7 +38,7 @@ export IFLOW_MIRROR_URL
 
 source $IFLOW_SHELL_DIR/common.sh
 
-RUN_ROOT apt-get update && apt-get install -y klayout tcl-dev
+RUN_ROOT apt-get update && apt-get install -y cmake klayout tcl-dev libspdlog1
 RUN_ROOT cp -f /usr/include/tcl8.6/*.h /usr/include/
 RUN_ROOT ln -s -f /usr/lib/x86_64-linux-gnu/libtcl8.6.so /usr/lib/x86_64-linux-gnu/libtcl8.5.so
 
@@ -47,7 +47,7 @@ CHECK_DIR /usr/local/include/lemon ||\
 {
         # RUN wget http://lemon.cs.elte.hu/pub/sources/lemon-1.3.1.tar.gz
         RUN cd $IFLOW_TOOLS_DIR
-        RUN tar zxvf lemon-1.3.1.tar.gz
+        CHECK_DIR lemon-1.3.1 || RUN tar zxvf lemon-1.3.1.tar.gz
         RUN cd lemon-1.3.1
         RUN mkdir -p build
         RUN cd build
