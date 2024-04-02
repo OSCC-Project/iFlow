@@ -36,30 +36,38 @@ sleep 1
 # RUN cmake .. 
 # RUN make -j$IFLOW_BUILD_THREAD_NUM
 # RUN cd $IFLOW_ROOT_DIR
-    
+
+RUN_ROOT apt-get update && apt-get install -y git tcl-dev ninja-build build-essential clang \
+    libreadline-dev bison flex libffi-dev cmake libboost-all-dev swig libeigen3-dev libspdlog-dev
+
+OPENROAD110=$IFLOW_TOOLS_DIR/OpenROAD9295a533
+OPENROAD120=$IFLOW_TOOLS_DIR/OpenROADae191807
+
+CHECK_DIR $OPENROAD110 || RUN git clone https://${IFLOW_MIRROR_URL}/The-OpenROAD-Project/OpenROAD.git tools/OpenROAD9295a533
+CHECK_DIR $OPENROAD120 || RUN cp -r $OPENROAD110 $OPENROAD120
+
 # OpenROAD9295a533
-CHECK_DIR $IFLOW_TOOLS_DIR/OpenROAD9295a533 || RUN git clone https://${IFLOW_MIRROR_URL}/The-OpenROAD-Project/OpenROAD.git tools/OpenROAD9295a533
-RUN cd $IFLOW_TOOLS_DIR/OpenROAD9295a533 
+RUN cd $OPENROAD110 
 RUN git checkout 9295a533 
-RUN cd $IFLOW_TOOLS_DIR/OpenROAD9295a533/src
-RUN git submodule update --init --recursive OpenSTA OpenDB flute3 replace ioPlacer FastRoute eigen TritonMacroPlace OpenRCX
-CHECK_DIR $IFLOW_TOOLS_DIR/OpenROAD9295a533/src/PDNSim || RUN git clone https://${IFLOW_MIRROR_URL}/ZhishengZeng/PDNSim.git PDNSim
-RUN cd $IFLOW_TOOLS_DIR/OpenROAD9295a533
-CHECK_DIR $IFLOW_TOOLS_DIR/OpenROAD9295a533/build || RUN mkdir build
-RUN cd build 
-RUN cmake .. 
-RUN make -j$IFLOW_BUILD_THREAD_NUM
+RUN cd $OPENROAD110/src
+RUN git submodule update --init --recursive --depth=1 OpenSTA OpenDB flute3 replace ioPlacer FastRoute eigen TritonMacroPlace OpenRCX
+CHECK_DIR $OPENROAD110/src/PDNSim || RUN git clone https://${IFLOW_MIRROR_URL}/ZhishengZeng/PDNSim.git PDNSim --depth=1 --branch=master
+
+RUN cd $OPENROAD110
+RUN mkdir -p build bin
+RUN cmake -S$OPENROAD110 -B$OPENROAD110/build -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:FILEPATH=$OPENROAD110/bin -DCMAKE_INSTALL_PREFIX=$OPENROAD110/bin -G Ninja
+RUN cmake --build $OPENROAD110/build -j $IFLOW_BUILD_THREAD_NUM
 RUN cd $IFLOW_ROOT_DIR
 
 # OpenROADae191807
-CHECK_DIR $IFLOW_TOOLS_DIR/OpenROADae191807 || RUN git clone https://${IFLOW_MIRROR_URL}/The-OpenROAD-Project/OpenROAD.git tools/OpenROADae191807
-RUN cd $IFLOW_TOOLS_DIR/OpenROADae191807 
+RUN cd $OPENROAD120 
 RUN git checkout ae191807  
-RUN git submodule update --init --recursive
-CHECK_DIR $IFLOW_TOOLS_DIR/OpenROADae191807/build || RUN mkdir build
-RUN cd build 
-RUN cmake .. 
-RUN make -j$IFLOW_BUILD_THREAD_NUM
+RUN git submodule update --init --recursive --depth=1
+
+RUN mkdir -p build bin
+RUN cmake -S$OPENROAD120 -B$OPENROAD120/build -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:FILEPATH=$OPENROAD120/bin -DCMAKE_INSTALL_PREFIX=$OPENROAD120/bin -G Ninja
+cmake -S$(pwd) -B$(pwd)/build -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:FILEPATH=$(pwd)/bin -DCMAKE_INSTALL_PREFIX=$(pwd)/bin  -G Ninja
+RUN cmake --build $OPENROAD120/build -j $IFLOW_BUILD_THREAD_NUM
 RUN cd $IFLOW_ROOT_DIR
 
 echo ""
