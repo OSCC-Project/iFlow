@@ -22,11 +22,11 @@ tool1  = Tools(
 tool2  = Tools(
         ('floorplan','tapcell','pdn','gplace','resize','dplace','cts','filler','groute'),   
         'openroad_1.1.0',
-        '../../../iFlow/tools/OpenROAD9295a533/build/src/openroad')
+        '../../../iFlow/tools/OpenROAD9295a533/bin/openroad')
 tool3  = Tools(
         ('v2def','floorplan','tapcell','pdn','gplace','resize','dplace','cts','filler','groute','droute'),   
         'openroad_1.2.0',
-        '../../../iFlow/tools/OpenROADae191807/build/src/openroad')
+        '../../../iFlow/tools/OpenROADae191807/bin/openroad')
 tool4  = Tools(
         ('droute',),   
         'TritonRoute_1.0',
